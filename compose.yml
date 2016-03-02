@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+    nginx:
+        container_name: nginx
+        build:
+            context: .
+        volumes:
+            - ./sites-available/:/etc/nginx/sites-available/
+            - ./nginx.conf:/etc/nginx/nginx.conf
+            - ./global:/etc/nginx/global/
+        ports:
+            - "80:80"       # Static file server
+            - "3000:3000"   # Nodejs
+        restart: on-failure:3

@@ -1,0 +1,32 @@
+# Redirect www. to non-www variant
+# Permanent redirect to not get nuked by search engines
+server {
+	listen 8080;
+	server_name www.docker.dev;
+	rewrite ^(.*) $scheme://docker.dev$1 permanent;
+}
+
+# The actual HTTP server
+server {
+	listen 8080;
+	listen [::]:8080 ipv6only=on;
+
+	server_name docker.dev;
+
+	# Add cache zones
+	proxy_cache static;
+
+	error_log   /var/log/nginx/docker.dev/error.log  debug;
+	access_log  /var/log/nginx/$host/access.log      full;
+
+	#root        /var/www/docker.dev;
+	#error_page  502 /50x.html;
+	error_page  404 /40x.html;
+
+	include     global/basic.conf;
+
+	location / {
+		default_type "text/html";
+		try_files    $uri $uri/ /index.php /index.html;
+	}
+}
