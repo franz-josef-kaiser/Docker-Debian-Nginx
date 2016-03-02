@@ -13,7 +13,8 @@ describe "Dockerfile" do
 		set :docker_image, @image.id
 
 		@container = Docker::Container.create(
-			'Image' => @image.id
+			'Image' => @image.id,
+			'Cmd'   => [ "nginx", "-g", "deamon off;" ]
 		)
 		@container.start
 
